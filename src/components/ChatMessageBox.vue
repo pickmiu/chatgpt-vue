@@ -1,7 +1,7 @@
 <template>
-  <div class="messageBox">
+  <div :class="boxType == 'chatgpt' ? 'messageBox':'messageBox-me'">
     <!-- logo -->
-    <div class="logo">
+    <div class="logo" v-if="boxType == 'chatgpt'">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -36,19 +36,97 @@
       </svg>
     </div>
 
+    <div class="logo-me" v-else>我</div>
+
     <!-- messageBody-->
     <div class="messageBody">
       <!-- messageContent-->
-      <div class="messageText">你好</div>
+      <p class="p-text"> {{ messageText }} </p>
+      <p class="p-text"> {{ messageText }} </p>
+      <p class="p-text"> {{ messageText }} </p>
     </div>
     <!-- messageTime-->
-    <div class="messageTime">2023/10/22 17:48:20</div>
+    <div class="messageTime">{{ time }}</div>
   </div>
 </template>
 
 <script setup>
-
+// 定义该组件传递的参数
+const props = defineProps({
+  boxType: String,
+  messageText: String,
+  time: String
+});
 </script>
 
-<style>
+<style scoped>
+
+.messageBox {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.messageBox-me {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.p-text {
+  font-size: 14px;
+}
+
+.messageBody {
+  display: inline-block;
+  border-radius: 10px;
+  background-color: rgba(0, 0, 0, 0.05);
+  padding: 10px;
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  user-select: text;
+  word-break: break-word;
+  border: 1px solid #dedede;
+  padding: 10px;
+  margin: 10px 15px 0px 15px;
+}
+
+.logo {
+  margin-left: 15px;
+  margin-right: 15px;
+  display: block;
+}
+
+.logo-me {
+  margin-left: 15px;
+  margin-right: 15px;
+  display: block;
+  width: 30px;
+  height: 30px;
+  font-size: 14.3px;
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  background-color: #353740;
+  color: #fff;
+}
+
+.messageTime {
+  margin-left: 15px;
+  margin-right: 15px;
+  margin-bottom: 20px;
+  margin-top: 1px;
+  display: block;
+  font-size: 12px;
+  opacity: 0.2;
+  white-space: nowrap;
+  transition: all 0.6s ease;
+  color: #353740;
+  text-align: left;
+  box-sizing: border-box;
+  padding-left: 5px;
+  pointer-events: none;
+}
 </style>
