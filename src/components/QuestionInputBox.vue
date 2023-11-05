@@ -1,7 +1,12 @@
 <template>
   <div class="inputBox">
-    <textarea v-model="questionText" class="textarea" placeholder="请输入你的问题"  @keyup.enter="submitQuestionEnter"></textarea>
-    <button class="button" @click="submitQuestionButton">
+    <textarea
+      v-model="questionText"
+      class="textarea"
+      placeholder="请输入你的问题"
+      @keyup.enter="submitQuestionEnter"
+    ></textarea>
+    <button class="button" ref="button" @click="submitQuestionButton">
       <svg
         t="1697622340336"
         class="icon icon-send"
@@ -13,8 +18,9 @@
         height="200"
       >
         <path
+          ref="path"
           d="M512.877641 511.997001m-301.216175 301.216175a425.984 425.984 0 1 0 602.43235-602.43235 425.984 425.984 0 1 0-602.43235 602.43235Z"
-          fill="#1d93ab"
+          :fill="fillColor"
           p-id="12485"
           data-spm-anchor-id="a313x.search_index.0.i25.4f943a810DQ16G"
           class="selected"
@@ -33,46 +39,73 @@
 </template>
 
 <script setup>
-import { ref, watch } from 'vue'
+import { ref, watch } from "vue";
 // 暴露submitQuestion事件给父组件
-const emit = defineEmits(['submitQuestion'])
-const questionText = ref('')
+const emit = defineEmits(["submitQuestion"]);
+const questionText = ref("");
+const button = ref(null);
+const fillColor = ref("#dedede");
+
 function submitQuestionButton() {
-    emit('submitQuestion', questionText.value)
-    questionText.value = ''
+  if (isInValidInputText(questionText.value)) {
+    return;
+  }
+  console.log(questionText.value + ".");
+  emit("submitQuestion", questionText.value);
+  questionText.value = "";
 }
+
 function submitQuestionEnter() {
-    emit('submitQuestion', questionText.value)
-    questionText.value = ''
+  if (isInValidInputText(questionText.value)) {
+    return;
+  }
+  console.log(questionText.value + ".");
+  emit("submitQuestion", questionText.value);
+  questionText.value = "";
+}
+
+// 判断输入内容是否合法
+function isInValidInputText(questionText) {
+  if (questionText === "") {
+    return true;
+  }
+  for (let i = 0; i < questionText.length; i++) {
+    const chatCode = questionText.charAt(i).charCodeAt(0);
+    if (chatCode !== 10 && chatCode !== 13 && questionText.charAt(i) !== ' ') {
+      return false;
+    } 
+  }
+  return true;
 }
 
 watch(questionText, (val) => {
-    if (val = '') {
-
-    } else {
-
-    }
-})
+  if (isInValidInputText(val)) {
+    fillColor.value = "#dedede";
+    button.value.style.backgroundColor = "#dedede";
+  } else {
+    fillColor.value = "#1d93ab";
+    button.value.style.backgroundColor = "#1d93ab";
+  }
+});
 </script>
 
 <style style scoped>
-
 .inputBox {
   display: flex;
-  order: -100000000000000000;
   align-items: center;
   justify-content: space-evenly;
   margin: 35px 0px 35px 0px;
-  height: 120px;
-  width: 540px;
-  border-radius: 10px;  
+  height: 15%;
+  width: 90%;
+  border-radius: 10px;
   border: 1px solid #dedede;
   box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.03);
+  flex-shrink: 0;
 }
 
 .textarea {
-  height: 100px;
-  width: 500px;
+  height: 85%;
+  width: 92%;
   background-color: #fff;
   color: #303030;
   font-family: inherit;
@@ -89,12 +122,12 @@ watch(questionText, (val) => {
   justify-content: flex-start;
   align-items: center;
   align-self: end;
-  background: #1d93ab;
+  background: #dedede;
   height: 36px;
   width: 66.5px;
   border-radius: 10px;
   margin-bottom: 13px;
-margin-right: 10px;
+  margin-right: 10px;
 }
 
 .icon-send {

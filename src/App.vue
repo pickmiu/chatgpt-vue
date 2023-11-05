@@ -3,26 +3,63 @@ import ChatMessageBox from "./components/ChatMessageBox.vue";
 import QuestionInputBox from "./components/QuestionInputBox.vue";
 import moment from "moment";
 import { ref } from "vue";
+import ajax from "./network/network.js";
+import ChatHeader from "./components/ChatHeader.Vue";
 
-const chatRecordList = ref([]);
+const chatRecordList = ref([
+  {
+    id: 1,
+    boxType: "chatgpt",
+    messageText: "Hi，我是ChatGPT，请在下方输入你的问题。",
+    time: moment(new Date()).format("YYYY/MM/DD HH:mm:ss"),
+  }
+]);
 
 function submitQuestion(questionText) {
-  let id = chatRecordList.value.length + 1;
-  let boxType = id % 2 == 0 ? "chatgpt" : "me";
-
   chatRecordList.value.push({
-    id: id,
-    boxType: boxType,
+    id: chatRecordList.value.length + 1,
+    boxType: "me",
     messageText: questionText,
     time: moment(new Date()).format("YYYY/MM/DD HH:mm:ss"),
   });
-}
 
+  ajax
+    .post("/api/chat/question/tradition", { questionContent: questionText })
+    .then(function (response) {
+      // 获取响应的状态码
+      if (response.status === 200) {
+        let replyText = response.data;
+        chatRecordList.value.push({
+          id: chatRecordList.value.length + 1,
+          boxType: "chatgpt",
+          messageText: replyText,
+          time: moment(new Date()).format("YYYY/MM/DD HH:mm:ss"),
+        });
+      } else {
+        chatRecordList.value.push({
+          id: chatRecordList.value.length + 1,
+          boxType: "chatgpt",
+          messageText: "服务器错误,请联系管理员",
+          time: moment(new Date()).format("YYYY/MM/DD HH:mm:ss"),
+        });
+      }
+    })
+    .catch(function (error) {
+      console.log(error);
+      chatRecordList.value.push({
+          id: chatRecordList.value.length + 1,
+          boxType: "chatgpt",
+          messageText: "服务器错误,请联系管理员",
+          time: moment(new Date()).format("YYYY/MM/DD HH:mm:ss"),
+        });
+    });
+}
 </script>
 
 <template>
   <div class="mainContainer">
     <div class="chatContainer" ref="chatContainer">
+      <ChatHeader/>
       <div class="chatMessageContainer">
         <ChatMessageBox
           v-for="record in chatRecordList.slice().reverse()"
@@ -59,17 +96,19 @@ function submitQuestion(questionText) {
   display: flex;
   justify-content: center;
   align-items: center;
+  height: 100vh;
 }
 .chatContainer {
   display: flex;
   align-items: center;
-  flex-direction: column-reverse;
+  flex-direction: column;
   margin: 0 20px 0 20px;
-  height: 100vh;
-  border-width: 0px 1px;
+  height: 90vh;
+  border-width: 1px 1px;
   border-style: solid;
   border-color: #dedede;
   width: 600px;
+  border-radius: 5px 5px 5px 5px;
 }
 
 .chatMessageContainer {
@@ -77,6 +116,7 @@ function submitQuestion(questionText) {
   border-style: solid;
   border-color: #dedede;
   width: 100%;
+  height: 628px;
   display: flex;
   flex-direction: column-reverse;
   overflow-y: auto;

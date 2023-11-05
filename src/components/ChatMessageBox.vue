@@ -39,10 +39,8 @@
     <div class="logo-me" v-else>我</div>
 
     <!-- messageBody-->
-    <div class="messageBody">
+    <div  :class="boxType == 'chatgpt' ? 'messageBody':'messageBody-me'">
       <!-- messageContent-->
-      <p class="p-text"> {{ messageText }} </p>
-      <p class="p-text"> {{ messageText }} </p>
       <p class="p-text"> {{ messageText }} </p>
     </div>
     <!-- messageTime-->
@@ -81,6 +79,20 @@ const props = defineProps({
   display: inline-block;
   border-radius: 10px;
   background-color: rgba(0, 0, 0, 0.05);
+  padding: 10px;
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  user-select: text;
+  word-break: break-word;
+  border: 1px solid #dedede;
+  padding: 10px;
+  margin: 10px 15px 0px 15px;
+}
+
+.messageBody-me {
+  display: inline-block;
+  border-radius: 10px;
+  background-color: #e7f8ff;
   padding: 10px;
   -webkit-user-select: text;
   -moz-user-select: text;

@@ -1,6 +1,9 @@
 import axios from 'axios' 
 
 // 配置axios
-const service = axios.create({ 
-    baseURL: 'http://localhost:8080'
+const ajax = axios.create({ 
+    baseURL: 'http://localhost:8081',
+    timeout: 30000
 })
+
+export default ajax
