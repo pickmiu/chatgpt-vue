@@ -4,7 +4,7 @@ import QuestionInputBox from "./components/QuestionInputBox.vue";
 import moment from "moment";
 import { ref } from "vue";
 import ajax from "./network/network.js";
-import ChatHeader from "./components/ChatHeader.Vue";
+import ChatHeaderBox from "./components/ChatHeaderBox.vue";
 
 const chatRecordList = ref([
   {
@@ -59,7 +59,7 @@ function submitQuestion(questionText) {
 <template>
   <div class="mainContainer">
     <div class="chatContainer" ref="chatContainer">
-      <ChatHeader/>
+      <ChatHeaderBox/>
       <div class="chatMessageContainer">
         <ChatMessageBox
           v-for="record in chatRecordList.slice().reverse()"
