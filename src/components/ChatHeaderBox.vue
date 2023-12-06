@@ -1,6 +1,6 @@
 <template>
     <div class="chat-header">
-      <div class="header-text">ChatGPT</div>
+      <div class="header-text">聊天对话</div>
     </div>
   </template>
   

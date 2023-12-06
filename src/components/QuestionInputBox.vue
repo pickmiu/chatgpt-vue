@@ -83,8 +83,8 @@ watch(questionText, (val) => {
     fillColor.value = "#dedede";
     button.value.style.backgroundColor = "#dedede";
   } else {
-    fillColor.value = "#1d93ab";
-    button.value.style.backgroundColor = "#1d93ab";
+    fillColor.value = "#10a37f";
+    button.value.style.backgroundColor = "#10a37f";
   }
 });
 </script>
